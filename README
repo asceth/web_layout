@@ -1,0 +1,4 @@
+web_layout provides the ability to form a layout around content.
+
+It uses web_static's request cycle and hooks into web_router.  Also
+uses haml application to parse and load the templates.
