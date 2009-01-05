@@ -43,8 +43,6 @@ start_link() ->
 %% Function: register_layout(Name, WebRouter, File) -> ok | {error,Error}
 %% Description: Registers a layout in herml with specified name to a web router.
 %%--------------------------------------------------------------------
-register_layout(Name, WebRouter, File) when is_atom(Name) ->
-  gen_server:cast(?SERVER, {register_layout, atom_to_list(Name), WebRouter, File});
 register_layout(Name, WebRouter, File) ->
   gen_server:cast(?SERVER, {register_layout, Name, WebRouter, File}).
 
