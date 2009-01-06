@@ -95,7 +95,7 @@ init([]) ->
 %% Description: Handling call messages
 %%--------------------------------------------------------------------
 handle_call({execute_layout, Session}, From, #state{layouts=Layouts} = State) ->
-  spawn(fun() -> execute_layout(From, Session:flash_lookup("layout"), Layouts, Session) end),
+  spawn(fun() -> execute_layout(From, web_session:flash_lookup(Session, "layout"), Layouts, Session) end),
   {noreply, State};
 handle_call(_Request, _From, State) ->
   Reply = ok,
@@ -158,7 +158,7 @@ execute_layout(From, {error, 404}, Layouts, Session) ->
   Reply = case lists:keysearch(default, 1, Layouts) of
             false ->
               % if no layout try to render just the YieldedContent from the session
-              case Session:flash_lookup("YieldedContent") of
+              case web_session:flash_lookup(Session, "YieldedContent") of
                 {error, 404} ->
                   <<"">>;
                 YieldedContent ->
