@@ -118,7 +118,7 @@ handle_cast({register_layout, Name, WebRouter, File}, State) ->
                   [{Name, CompiledTemplate}]
               end,
   Layouts = State#state.layouts,
-  State1 = #state{layouts=Layouts ++ NewLayout},
+  State1 = #state{layouts=lists:ukeysort(1, NewLayout ++ Layouts)},
   {noreply, State1};
 handle_cast(_Msg, State) ->
   ?ERROR_MSG("Did not recognize: ~p", [_Msg]),
