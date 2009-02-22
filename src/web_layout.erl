@@ -107,14 +107,14 @@ handle_call(_Request, _From, State) ->
 %%                                      {stop, Reason, State}
 %% Description: Handling cast messages
 %%--------------------------------------------------------------------
-handle_cast({register_layout, Name, WebRouter, File}, State) ->
-  ?DEBUG("Loading up ~p for router ~p for layout ~p~n~n", [File, WebRouter, Name]),
+handle_cast({register_layout, Name, Exchange, File}, State) ->
+  ?DEBUG("Loading up ~p for exchange ~p for layout ~p~n~n", [File, Exchange, Name]),
   NewLayout = case herml_parser:file(File) of
                 {error, Reason} ->
                   ?ERROR_MSG("Herml Compile failed for ~s with: ~p~n", [File, Reason]),
                   [];
                 CompiledTemplate ->
-                  web_router:add(WebRouter, request_layout_view, global, web_layout, layout_view, 1),
+                  web_router_exchange:add_binding(Exchange, fun web_layout:layout_view/1, <<"get.request_layout_view.global">>),
                   [{Name, CompiledTemplate}]
               end,
   Layouts = State#state.layouts,
