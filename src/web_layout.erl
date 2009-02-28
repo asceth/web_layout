@@ -60,11 +60,11 @@ layout_view(Session) ->
 yield(Env) ->
   case lists:keysearch("Session", 1, Env) of
     false ->
-      <<"">>;
+      "";
     {value, {_Key, Value}} ->
       case Value:flash_lookup("YieldedContent") of
         {error, 404} ->
-          <<"">>;
+          "";
         YieldedContent ->
           YieldedContent
       end
@@ -160,12 +160,12 @@ execute_layout(From, {error, 404}, Layouts, Session) ->
               % if no layout try to render just the YieldedContent from the session
               case web_session:flash_lookup(Session, "YieldedContent") of
                 {error, 404} ->
-                  <<"">>;
+                  "";
                 YieldedContent ->
                   YieldedContent
               end;
             {value, {_Key, Value}} ->
-              herml_htmlizer:render(Value, [{"Session", Session}])
+              herml_htmlizer:render(Value, [{"Session", Session}], 0)
           end,
   gen_server:reply(From, Reply);
 
@@ -174,7 +174,7 @@ execute_layout(From, Layout, Layouts, Session) ->
             false ->
               execute_layout(From, {error, 404}, Layouts, Session);
             {value, {_Key, Value}} ->
-              herml_htmlizer:render(Value, [{"Session", Session}])
+              herml_htmlizer:render(Value, [{"Session", Session}], 0)
           end,
   gen_server:reply(From, Reply).
 
